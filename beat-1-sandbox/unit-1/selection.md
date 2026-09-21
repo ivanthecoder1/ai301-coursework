@@ -18,6 +18,8 @@ wrong label is not graded.
 [The individual Path Review issue page. A link to the repository or the issue list
 does not satisfy this field.]
 
+https://github.com/codepath/pathreview-ai301-fa26-s3/issues/54
+
 **Verdict output**
 
 [Your skill's live-mode output for this issue, pasted verbatim and ending with the
@@ -30,7 +32,22 @@ partial re-run costs about $0.20 — or run the skill on different candidates. O
 recording `reject` for the issue you chose earns no credit for this field.
 
 ```
-paste the output here, including the closing JSON block
+2. #54 — Resume section detection fails on leading whitespace (bug, ingestion, tier-1, good first issue)
+The most prescriptive of the three: names the function (_detect_sections() in resume_parser.py), the cause (patterns anchored at line start, ^Experience/\nExperience), a runnable repro with observed vs. expected output, and the three failing tests in tests/unit/test_resume_parser.py. That test list also tells you which @pytest.mark.xfail(strict=True) markers you must delete — per docs/CONTRIBUTING.md, forgetting that makes CI fail with XPASS(strict). No effort estimate given.
+
+[
+  {
+    "item": "https://github.com/codepath/pathreview-ai301-fa26-s3/issues/54",
+    "checks": [
+      {"name": "Maintainer activity", "grade": "pass", "evidence": "Last 5 main commits all authored by Aburke225, newest 2026-09-16 (5 days before capture) — clause (c)"},
+      {"name": "Repo activity", "grade": "pass", "evidence": "Commit 2f4e82f dated 2026-09-16, within 90 days of capture date 2026-09-21"},
+      {"name": "Newcomer scope", "grade": "pass", "evidence": "Names _detect_sectionsause (patterns anchored at line start), a runnable repro with observed [] vs expectedSkills, and 3 failing tests"},
+      {"name": "No existing contributor", "grade": "pass", "evidence": "assignees: [], comments: [], timeline has only 4 label events from 2026-09-10, and `gh pr list --state all` returns [] repo-wide"},
+      {"name": "Contribution policy", "grade": "pass", "evidence": "docs/CONTRIBUTING.md sets CI/commit conditions but is silent on AI use; no AI_POLICY.md and no disclosure checkbox in PULL_REQUEST_TEMPLATE.md"}
+    ],
+    "verdict": "accept"
+  }
+]
 ```
 
 ---
@@ -246,10 +263,16 @@ only one run occurred. **The last score in your list must match the agreement li
 issues are not scored). State your rubric's decision, the gold label, and the
 reasoning that produced your rubric's result.]
 
+For issue-19, my rubric returned reject while the gold label was accept. The rubric treated the issue's scope as too broad for a newcomer, even though the gold reasoning considered it a bounded performance bug with named causes. This showed that my scope check was initially too strict about the complexity of a change. I revised the scope check to allow substantive bug and performance fixes when the affected behavior or cause is clearly identified. The final full run still returned reject for issue-19, but the overall result was 19/20, which passed the required bar.
+
 **Check rationale**
 
 [One check from the `rubric.md` uploaded to `tools/issue-select/`, quoted as it is
 currently written, with the reasoning behind its current form.]
+
+| Contribution policy | Repo-facts block: contribution policy and any dedicated AI policy files | Pass if the repository permits AI-assisted contributions, is silent about AI use, or allows AI use subject to conditions such as disclosure, review, testing, or personal responsibility. Fail if the repository explicitly bans AI-generated code or documentation. Unclear if the available evidence cannot establish the policy. | required |
+
+I added this check because the initial full evaluation accepted issue-12 even though the gold verdict was reject. The issue passed the other four checks, but the repository explicitly prohibited AI-generated contributions. Since this course uses an AI-assisted contribution workflow, the repository's contribution policy is relevant to whether an otherwise suitable first issue is actually appropriate. Adding this check caused issue-12 to match the gold verdict and also satisfied the required policy category.
 
 **Trade-offs**
 
@@ -257,6 +280,8 @@ currently written, with the reasoning behind its current form.]
 result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
 stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
 the point in full when the reason follows.]
+
+The contribution-policy check can reject an issue that otherwise looks like a good first contribution if the repository has an explicit AI restriction. I accepted this trade-off because the evidence guide identifies contribution policy as a separate surface that can make an otherwise suitable issue a dead end. I also re-ran issue-12 with --only after changing the check, and it changed from accept to the correct reject. The final full run then achieved 19/20 agreement.
 
 ---
 
@@ -279,3 +304,7 @@ This is also the basis for the claim comment you write in Unit 2.
 
 Related paths: `eval-run.txt` in this directory; your skill's files in
 `tools/issue-select/`.
+
+1. I selected issue 54 because it is a Python bug involving resume section detection, which fits my software engineering interests and gives me a practical debugging and testing task.
+2. The verdict correctly identified that the issue is active, unclaimed, within scope for a newcomer, and compatible with the repository's contribution policy. The rubric could not fully weigh how interesting the actual implementation would be to me or how useful the task would be as a learning opportunity, so I considered those factors separately.
+3. I expect claiming the issue to be reasonably straightforward because there are no existing claims, assignees, comments, or linked pull requests identified by the live evaluation.
